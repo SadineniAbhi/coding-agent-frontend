@@ -1,0 +1,56 @@
+.dashboard {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1e;
+  color: #f2f1ed;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  border-bottom: 1px solid #313136;
+  flex-shrink: 0;
+}
+
+.dashboard-brand {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #a9a8a3;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #48484d;
+  color: #f2f1ed;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-logout:hover {
+  border-color: #6c5ce7;
+}
+
+.dashboard-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}

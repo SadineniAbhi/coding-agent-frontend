@@ -1,0 +1,89 @@
+import { useCallback, useEffect, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import Sidebar from '../components/Sidebar'
+import MainPanel from '../components/MainPanel'
+import CreateProjectForm from '../components/CreateProjectForm'
+import { listProjects, type Project } from '../api'
+import './Dashboard.css'
+
+export default function Dashboard() {
+  const { user, logout, getAccessTokenSilently } = useAuth0()
+
+  const [projects, setProjects] = useState<Project[]>([])
+  const [projectsLoading, setProjectsLoading] = useState(true)
+  const [projectsError, setProjectsError] = useState<string | null>(null)
+
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [creatingProject, setCreatingProject] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+  const refreshProjects = useCallback(() => {
+    setProjectsLoading(true)
+    setProjectsError(null)
+    return listProjects(getAccessTokenSilently)
+      .then(setProjects)
+      .catch((err) => setProjectsError(err instanceof Error ? err.message : String(err)))
+      .finally(() => setProjectsLoading(false))
+  }, [getAccessTokenSilently])
+
+  useEffect(() => {
+    refreshProjects()
+  }, [refreshProjects])
+
+  function handleSelectProject(project: Project) {
+    setCreatingProject(false)
+    setSelectedProject(project)
+  }
+
+  function handleNewProject() {
+    setSelectedProject(null)
+    setCreatingProject(true)
+  }
+
+  function handleProjectCreated(project: Project) {
+    setProjects((prev) => [...prev, project])
+    setSelectedProject(project)
+    setCreatingProject(false)
+  }
+
+  return (
+    <div className="dashboard">
+      <header className="dashboard-header">
+        <span className="dashboard-brand">AbhiCode</span>
+        <div className="dashboard-user">
+          {user?.picture && <img src={user.picture} alt="" className="avatar" />}
+          <span>{user?.name ?? user?.email}</span>
+          <button
+            className="btn-logout"
+            onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+          >
+            Log out
+          </button>
+        </div>
+      </header>
+
+      <div className="dashboard-body">
+        <Sidebar
+          projects={projects}
+          loading={projectsLoading}
+          error={projectsError}
+          selectedProjectId={selectedProject?.project_id ?? null}
+          onSelectProject={handleSelectProject}
+          onNewProject={handleNewProject}
+          collapsed={sidebarCollapsed}
+          onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
+        />
+
+        {creatingProject ? (
+          <CreateProjectForm onCreated={handleProjectCreated} onCancel={() => setCreatingProject(false)} />
+        ) : (
+          <MainPanel
+            selectedProjectId={selectedProject?.project_id ?? null}
+            selectedProjectName={selectedProject?.name ?? null}
+            onCreateProject={handleNewProject}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
