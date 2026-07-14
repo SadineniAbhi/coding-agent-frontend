@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import { getSessionMessages, type Message } from '../api'
+import { getSessionMessages, runAgent, type Message } from '../api'
+import Composer from './Composer'
 import './MainPanel.css'
 
 type MainPanelProps = {
@@ -33,15 +34,20 @@ function EmptyState({ onCreateProject }: { onCreateProject: () => void }) {
 }
 
 function ProjectMessages({ projectId, projectName }: { projectId: string; projectName: string | null }) {
-  const { getAccessTokenSilently } = useAuth0()
+  const { user, getAccessTokenSilently } = useAuth0()
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [draft, setDraft] = useState('')
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
     setError(null)
+    setDraft('')
+    setSendError(null)
 
     getSessionMessages(projectId, getAccessTokenSilently)
       .then((data) => {
@@ -59,6 +65,46 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
     }
   }, [projectId, getAccessTokenSilently])
 
+  async function handleSend() {
+    const task = draft.trim()
+    if (!task || sending) return
+
+    setSending(true)
+    setSendError(null)
+    setDraft('')
+    setMessages((prev) => [...prev, { role: 'user', content: task }, { role: 'assistant', content: '' }])
+
+    try {
+      await runAgent(projectId, task, getAccessTokenSilently, (chunk) => {
+        setMessages((prev) => {
+          const next = [...prev]
+          const last = next[next.length - 1]
+          next[next.length - 1] = { ...last, content: last.content + chunk }
+          return next
+        })
+      })
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : String(err))
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const isEmptyChat = !loading && !error && messages.length === 0
+
+  if (isEmptyChat) {
+    const firstName = user?.given_name || user?.name?.split(' ')[0] || 'there'
+    return (
+      <div className="main-panel main-panel-empty">
+        <div className="chat-empty">
+          <h1>What are we building in {projectName ?? 'this project'}, {firstName}?</h1>
+          <Composer value={draft} onChange={setDraft} onSend={handleSend} sending={sending} />
+          {sendError && <div className="messages-status messages-error">{sendError}</div>}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="main-panel">
       <div className="main-panel-header">
@@ -68,9 +114,6 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
       <div className="messages">
         {loading && <div className="messages-status">Loading messages…</div>}
         {error && <div className="messages-status messages-error">{error}</div>}
-        {!loading && !error && messages.length === 0 && (
-          <div className="messages-status">No messages yet for this project.</div>
-        )}
 
         {messages.map((message, i) => (
           <div key={i} className={`message message-${message.role}`}>
@@ -78,6 +121,11 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
             <div className="message-content">{message.content}</div>
           </div>
         ))}
+      </div>
+
+      <div className="chat-input-bar">
+        <Composer value={draft} onChange={setDraft} onSend={handleSend} sending={sending} />
+        {sendError && <div className="messages-status messages-error">{sendError}</div>}
       </div>
     </div>
   )

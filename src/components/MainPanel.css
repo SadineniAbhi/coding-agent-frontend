@@ -26,24 +26,26 @@
   margin: 0 0 28px;
 }
 
-.empty-state .btn {
-  width: auto;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
+.chat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 640px;
+  padding: 0 24px;
 }
 
-.empty-state .btn-primary {
-  background: #f2f1ed;
-  color: #1c1c1e;
+.chat-empty h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 0 0 20px;
 }
 
-.empty-state .btn:disabled {
-  opacity: 0.6;
-  cursor: default;
+.chat-input-bar {
+  padding: 16px 32px 24px;
+  border-top: 1px solid #313136;
 }
 
 .main-panel-header {

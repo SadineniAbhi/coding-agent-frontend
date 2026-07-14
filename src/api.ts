@@ -81,3 +81,55 @@ export async function listGithubRepos(token: string, getToken: GetToken): Promis
 export async function createProject(payload: CreateProjectPayload, getToken: GetToken): Promise<Project> {
   return authedPostJson<Project>('/project', payload, getToken)
 }
+
+export async function runAgent(
+  projectId: string,
+  task: string,
+  getToken: GetToken,
+  onToken: (content: string) => void,
+): Promise<void> {
+  const token = await getToken()
+  const res = await fetch(`${API_BASE_URL}/agent/${projectId}/run`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ task }),
+  })
+
+  if (!res.ok || !res.body) {
+    throw new Error(await extractErrorMessage(res))
+  }
+
+  const reader = res.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+
+    const events = buffer.split('\n\n')
+    buffer = events.pop() ?? ''
+
+    for (const raw of events) {
+      const line = raw.trim()
+      if (!line.startsWith('data:')) continue
+
+      let event: { type: string; content?: string; message?: string }
+      try {
+        event = JSON.parse(line.slice(5).trim())
+      } catch {
+        continue
+      }
+
+      if (event.type === 'token' && event.content) {
+        onToken(event.content)
+      } else if (event.type === 'error') {
+        throw new Error(event.message ?? 'Agent run failed')
+      }
+    }
+  }
+}

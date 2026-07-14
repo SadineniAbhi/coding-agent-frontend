@@ -6,6 +6,8 @@
   flex-direction: column;
   gap: 20px;
   max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .field {
@@ -44,15 +46,6 @@
 .field-textarea {
   resize: vertical;
   min-height: 72px;
-}
-
-.pat-row {
-  display: flex;
-  gap: 10px;
-}
-
-.pat-row .field-input {
-  flex: 1;
 }
 
 .field-status {
@@ -111,44 +104,4 @@
   justify-content: flex-end;
   gap: 12px;
   padding-top: 8px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.btn-primary {
-  background: #f2f1ed;
-  color: #1c1c1e;
-}
-
-.btn-secondary {
-  background: transparent;
-  border-color: #48484d;
-  color: #f2f1ed;
-  white-space: nowrap;
-}
-
-.btn-secondary:not(:disabled):hover {
-  border-color: #6c5ce7;
-}
-
-.btn-ghost {
-  background: transparent;
-  color: #a9a8a3;
-}
-
-.btn-ghost:hover {
-  color: #f2f1ed;
 }
