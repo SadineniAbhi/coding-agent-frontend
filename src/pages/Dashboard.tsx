@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import Sidebar from '../components/Sidebar'
 import MainPanel from '../components/MainPanel'
 import CreateProjectForm from '../components/CreateProjectForm'
-import { listProjects, type Project } from '../api'
+import { connectGithub, listProjects, type Project } from '../api'
 import './Dashboard.css'
 
 export default function Dashboard() {
@@ -29,6 +29,19 @@ export default function Dashboard() {
   useEffect(() => {
     refreshProjects()
   }, [refreshProjects])
+
+  const connectStarted = useRef(false)
+  useEffect(() => {
+    if (connectStarted.current) return
+    connectStarted.current = true
+    connectGithub(getAccessTokenSilently)
+      .then(({ redirect_url }) => {
+        if (redirect_url && redirect_url !== window.location.origin) {
+          window.location.href = redirect_url
+        }
+      })
+      .catch((err) => console.error('Failed to connect GitHub App:', err))
+  }, [getAccessTokenSilently])
 
   function handleSelectProject(project: Project) {
     setCreatingProject(false)

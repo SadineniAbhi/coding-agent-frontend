@@ -18,7 +18,6 @@ export type Repo = {
 export type CreateProjectPayload = {
   name: string
   github_user_name: string
-  github_pat_token: string
   github_repo_url: string
   description?: string
 }
@@ -70,12 +69,12 @@ export async function getSessionMessages(projectId: string, getToken: GetToken):
   return (await res.json()) as Message[]
 }
 
-export async function verifyGithubToken(token: string, getToken: GetToken): Promise<void> {
-  await authedPostJson('/github/verify-token', { token }, getToken)
+export async function connectGithub(getToken: GetToken): Promise<{ redirect_url: string }> {
+  return authedPostJson('/connect/github', {}, getToken)
 }
 
-export async function listGithubRepos(token: string, getToken: GetToken): Promise<Repo[]> {
-  return authedPostJson<Repo[]>('/github/list-repos', { token }, getToken)
+export async function listGithubRepos(getToken: GetToken): Promise<Repo[]> {
+  return authedPostJson<Repo[]>('/github/list-repos', {}, getToken)
 }
 
 export async function createProject(payload: CreateProjectPayload, getToken: GetToken): Promise<Project> {
