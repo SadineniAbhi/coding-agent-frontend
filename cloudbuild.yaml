@@ -8,6 +8,17 @@ steps:
       - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:latest
       - .
 
+  - name: gcr.io/cloud-builders/kubectl
+    entrypoint: kubectl
+    args:
+      - set
+      - image
+      - deployment/$_DEPLOYMENT
+      - $_CONTAINER=$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:$COMMIT_SHA
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$_REGION
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER
+
 images:
   - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:$COMMIT_SHA
   - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:latest
@@ -16,6 +27,9 @@ substitutions:
   _REGION: us-central1
   _REPOSITORY: coding-agent-project
   _IMAGE: coding-agent-frontend
+  _CLUSTER: codingagent
+  _DEPLOYMENT: coding-agent-frontend
+  _CONTAINER: coding-agent-frontend
 
 options:
   logging: CLOUD_LOGGING_ONLY
