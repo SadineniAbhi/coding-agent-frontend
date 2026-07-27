@@ -1,0 +1,21 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:$COMMIT_SHA
+      - -t
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:latest
+      - .
+
+images:
+  - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:$COMMIT_SHA
+  - $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPOSITORY/$_IMAGE:latest
+
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: YOUR_ARTIFACT_REGISTRY_REPO
+  _IMAGE: coding-agent-frontend
+
+options:
+  logging: CLOUD_LOGGING_ONLY
