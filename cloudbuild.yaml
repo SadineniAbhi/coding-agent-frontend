@@ -14,7 +14,7 @@ images:
 
 substitutions:
   _REGION: us-central1
-  _REPOSITORY: YOUR_ARTIFACT_REGISTRY_REPO
+  _REPOSITORY: coding-agent-project
   _IMAGE: coding-agent-frontend
 
 options:
