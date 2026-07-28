@@ -33,7 +33,6 @@ export default function CreateProjectForm({ onCreated, onCancel }: CreateProject
   const { getAccessTokenSilently } = useAuth0()
 
   const [name, setName] = useState('')
-  const [githubUserName, setGithubUserName] = useState('')
   const [description, setDescription] = useState('')
 
   const [repos, setRepos] = useState<Repo[]>([])
@@ -72,7 +71,6 @@ export default function CreateProjectForm({ onCreated, onCancel }: CreateProject
       const project = await createProject(
         {
           name: name.trim(),
-          github_user_name: githubUserName.trim(),
           github_repo_url: selectedRepoUrl,
           description: description.trim() || undefined,
         },
@@ -86,11 +84,7 @@ export default function CreateProjectForm({ onCreated, onCancel }: CreateProject
     }
   }
 
-  const canCreate =
-    name.trim().length > 0 &&
-    githubUserName.trim().length > 0 &&
-    selectedRepoUrl !== null &&
-    !creating
+  const canCreate = name.trim().length > 0 && selectedRepoUrl !== null && !creating
 
   return (
     <div className="main-panel">
@@ -106,16 +100,6 @@ export default function CreateProjectForm({ onCreated, onCancel }: CreateProject
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="my-project"
-          />
-        </label>
-
-        <label className="field">
-          <span className="field-label">GitHub username</span>
-          <input
-            className="field-input"
-            value={githubUserName}
-            onChange={(e) => setGithubUserName(e.target.value)}
-            placeholder="octocat"
           />
         </label>
 

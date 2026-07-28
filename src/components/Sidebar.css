@@ -1,28 +1,35 @@
 .sidebar {
   width: 260px;
   flex-shrink: 0;
-  border-right: 1px solid #313136;
-  padding: 20px 12px;
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
   overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
   transition: width 0.15s ease;
 }
 
 .sidebar-collapsed {
-  width: 52px;
-  padding: 20px 8px;
+  width: 56px;
+  padding: 16px 0;
+  align-items: center;
 }
 
 .sidebar-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px 12px;
+  padding: 0 4px 16px;
 }
 
-.sidebar-collapsed .sidebar-top {
-  justify-content: center;
-  padding: 0 0 12px;
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .sidebar-heading {
@@ -30,7 +37,8 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #8a8985;
+  color: var(--text-muted);
+  padding: 12px 8px 6px;
 }
 
 .sidebar-top-actions {
@@ -43,9 +51,9 @@
 .sidebar-icon-btn {
   background: transparent;
   border: none;
-  color: #8a8985;
+  color: var(--text-muted);
   cursor: pointer;
-  padding: 5px;
+  padding: 6px;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -54,19 +62,57 @@
 }
 
 .sidebar-icon-btn:hover {
-  background: #262629;
-  color: #f2f1ed;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.sidebar-new-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent);
+}
+
+.sidebar-search-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 13px;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+}
+
+.sidebar-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 .sidebar-empty,
 .sidebar-error {
   font-size: 13px;
-  color: #8a8985;
+  color: var(--text-muted);
   padding: 8px;
 }
 
 .sidebar-error {
-  color: #ff5c5c;
+  color: var(--accent-error);
 }
 
 .sidebar-list {
@@ -76,6 +122,8 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .sidebar-item {
@@ -83,7 +131,7 @@
   text-align: left;
   background: transparent;
   border: none;
-  color: #c7c6c1;
+  color: var(--text-tertiary);
   padding: 9px 10px;
   border-radius: 8px;
   font-size: 14px;
@@ -94,11 +142,99 @@
 }
 
 .sidebar-item:hover {
-  background: #262629;
+  background: var(--bg-secondary);
 }
 
 .sidebar-item-active {
-  background: #2c2c30;
-  color: #f2f1ed;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
   font-weight: 500;
+}
+
+/* Bottom user block (expanded) */
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px 4px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sidebar-user-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-logout-btn {
+  background: transparent;
+  border: 1px solid var(--border-strong-2);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.sidebar-logout-btn:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Collapsed icon rail */
+
+.sidebar-rail-brand {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.sidebar-rail-brand:hover {
+  background: var(--bg-secondary);
+}
+
+.sidebar-rail-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sidebar-rail-avatar {
+  margin-top: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
 }

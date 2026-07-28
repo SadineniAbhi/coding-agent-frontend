@@ -17,7 +17,6 @@ export type Repo = {
 
 export type CreateProjectPayload = {
   name: string
-  github_user_name: string
   github_repo_url: string
   description?: string
 }

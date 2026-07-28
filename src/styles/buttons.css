@@ -23,32 +23,36 @@
 }
 
 .btn-primary {
-  background: #f2f1ed;
-  color: #1c1c1e;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: var(--accent-hover);
 }
 
 .btn-secondary {
   background: transparent;
-  border-color: #48484d;
-  color: #f2f1ed;
+  border-color: var(--border-strong-2);
+  color: var(--text-primary);
   white-space: nowrap;
 }
 
 .btn-secondary:not(:disabled):hover {
-  border-color: #6c5ce7;
+  border-color: var(--accent);
 }
 
 .btn-ghost {
   background: transparent;
-  color: #a9a8a3;
+  color: var(--text-secondary);
 }
 
 .btn-ghost:hover {
-  color: #f2f1ed;
+  color: var(--text-primary);
 }
 
 .btn-github {
   background: transparent;
-  border-color: #48484d;
-  color: #f2f1ed;
+  border-color: var(--border-strong-2);
+  color: var(--text-primary);
 }

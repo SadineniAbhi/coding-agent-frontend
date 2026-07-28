@@ -45,12 +45,12 @@
 
 .chat-input-bar {
   padding: 16px 32px 24px;
-  border-top: 1px solid #313136;
+  border-top: 1px solid var(--border);
 }
 
 .main-panel-header {
   padding: 20px 32px;
-  border-bottom: 1px solid #313136;
+  border-bottom: 1px solid var(--border);
 }
 
 .main-panel-header h2 {
@@ -69,12 +69,12 @@
 }
 
 .messages-status {
-  color: #8a8985;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
 .messages-error {
-  color: #ff5c5c;
+  color: var(--accent-error);
 }
 
 .message {
@@ -99,7 +99,7 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #8a8985;
+  color: var(--text-muted);
 }
 
 .message-content {
@@ -112,12 +112,12 @@
 }
 
 .message-user .message-content {
-  background: #6c5ce7;
-  color: #f2f1ed;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .message-assistant .message-content {
-  background: #262629;
-  border: 1px solid #313136;
-  color: #f2f1ed;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
 }

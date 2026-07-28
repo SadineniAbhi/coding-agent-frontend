@@ -19,28 +19,28 @@
 .field-label {
   font-size: 13px;
   font-weight: 500;
-  color: #a9a8a3;
+  color: var(--text-secondary);
 }
 
 .field-input {
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #48484d;
-  background: #262629;
-  color: #f2f1ed;
+  border: 1px solid var(--border-strong-2);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
   box-sizing: border-box;
 }
 
 .field-input::placeholder {
-  color: #8a8985;
+  color: var(--text-muted);
 }
 
 .field-input:focus {
   outline: none;
-  border-color: #6c5ce7;
+  border-color: var(--accent);
 }
 
 .field-textarea {
@@ -50,15 +50,15 @@
 
 .field-status {
   font-size: 13px;
-  color: #8a8985;
+  color: var(--text-muted);
 }
 
 .field-status-ok {
-  color: #00d2a8;
+  color: var(--accent-success);
 }
 
 .field-status-error {
-  color: #ff5c5c;
+  color: var(--accent-error);
 }
 
 .repo-list {
@@ -67,7 +67,7 @@
   padding: 4px;
   max-height: 260px;
   overflow-y: auto;
-  border: 1px solid #313136;
+  border: 1px solid var(--border);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -79,7 +79,7 @@
   text-align: left;
   background: transparent;
   border: none;
-  color: #c7c6c1;
+  color: var(--text-tertiary);
   padding: 9px 10px;
   border-radius: 8px;
   font-size: 14px;
@@ -90,12 +90,12 @@
 }
 
 .repo-item:hover {
-  background: #262629;
+  background: var(--bg-secondary);
 }
 
 .repo-item-selected {
-  background: #2c2c30;
-  color: #f2f1ed;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
   font-weight: 500;
 }
 

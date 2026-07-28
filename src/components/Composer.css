@@ -4,8 +4,8 @@
   gap: 10px;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid #313136;
-  background: #1c1c1e;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
 }
 
 .composer-input {
@@ -14,7 +14,7 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #f2f1ed;
+  color: var(--text-primary);
   font-family: inherit;
   font-size: 15px;
   line-height: 1.4;
@@ -23,7 +23,7 @@
 }
 
 .composer-input::placeholder {
-  color: #8a8985;
+  color: var(--text-muted);
 }
 
 .composer-send {
@@ -32,8 +32,8 @@
   height: 32px;
   border-radius: 50%;
   border: none;
-  background: #f2f1ed;
-  color: #1c1c1e;
+  background: var(--text-primary);
+  color: var(--bg-primary);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -4,10 +4,12 @@ import Sidebar from '../components/Sidebar'
 import MainPanel from '../components/MainPanel'
 import CreateProjectForm from '../components/CreateProjectForm'
 import { connectGithub, listProjects, type Project } from '../api'
+import { useTheme } from '../useTheme'
 import './Dashboard.css'
 
 export default function Dashboard() {
   const { user, logout, getAccessTokenSilently } = useAuth0()
+  const { theme, toggleTheme } = useTheme()
 
   const [projects, setProjects] = useState<Project[]>([])
   const [projectsLoading, setProjectsLoading] = useState(true)
@@ -61,42 +63,31 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <span className="dashboard-brand">AbhiCode</span>
-        <div className="dashboard-user">
-          {user?.picture && <img src={user.picture} alt="" className="avatar" />}
-          <span>{user?.name ?? user?.email}</span>
-          <button
-            className="btn-logout"
-            onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-          >
-            Log out
-          </button>
-        </div>
-      </header>
+      <Sidebar
+        projects={projects}
+        loading={projectsLoading}
+        error={projectsError}
+        selectedProjectId={selectedProject?.project_id ?? null}
+        onSelectProject={handleSelectProject}
+        onNewProject={handleNewProject}
+        collapsed={sidebarCollapsed}
+        onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
+        userName={user?.name ?? user?.email ?? ''}
+        userPicture={user?.picture}
+        onLogout={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
 
-      <div className="dashboard-body">
-        <Sidebar
-          projects={projects}
-          loading={projectsLoading}
-          error={projectsError}
+      {creatingProject ? (
+        <CreateProjectForm onCreated={handleProjectCreated} onCancel={() => setCreatingProject(false)} />
+      ) : (
+        <MainPanel
           selectedProjectId={selectedProject?.project_id ?? null}
-          onSelectProject={handleSelectProject}
-          onNewProject={handleNewProject}
-          collapsed={sidebarCollapsed}
-          onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
+          selectedProjectName={selectedProject?.name ?? null}
+          onCreateProject={handleNewProject}
         />
-
-        {creatingProject ? (
-          <CreateProjectForm onCreated={handleProjectCreated} onCancel={() => setCreatingProject(false)} />
-        ) : (
-          <MainPanel
-            selectedProjectId={selectedProject?.project_id ?? null}
-            selectedProjectName={selectedProject?.name ?? null}
-            onCreateProject={handleNewProject}
-          />
-        )}
-      </div>
+      )}
     </div>
   )
 }
