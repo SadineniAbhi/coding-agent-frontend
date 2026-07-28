@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { getSessionMessages, runAgent, type Message } from '../api'
 import Composer from './Composer'
 import './MainPanel.css'
@@ -41,6 +43,11 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
   const [draft, setDraft] = useState('')
   const [sending, setSending] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ block: 'end' })
+  }, [messages])
 
   useEffect(() => {
     let cancelled = false
@@ -107,10 +114,6 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
 
   return (
     <div className="main-panel">
-      <div className="main-panel-header">
-        <h2>{projectName ?? projectId}</h2>
-      </div>
-
       <div className="messages">
         {loading && <div className="messages-status">Loading messages…</div>}
         {error && <div className="messages-status messages-error">{error}</div>}
@@ -118,9 +121,16 @@ function ProjectMessages({ projectId, projectName }: { projectId: string; projec
         {messages.map((message, i) => (
           <div key={i} className={`message message-${message.role}`}>
             <div className="message-role">{message.role === 'user' ? 'You' : 'AbhiCode'}</div>
-            <div className="message-content">{message.content}</div>
+            {message.role === 'assistant' ? (
+              <div className="message-content message-markdown">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+              </div>
+            ) : (
+              <div className="message-content">{message.content}</div>
+            )}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-input-bar">
