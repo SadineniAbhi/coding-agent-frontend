@@ -1,4 +1,25 @@
 .login-page {
+  /* Always dark, regardless of the global theme toggle/default — redeclare the
+     shared theme variables locally so components like buttons.css resolve
+     correctly here no matter what :root[data-theme] is set to. */
+  --bg-primary: #1c1c1e;
+  --bg-secondary: #262629;
+  --bg-tertiary: #2c2c30;
+  --bg-input: #17171a;
+  --border: #313136;
+  --border-strong: #3a3a3f;
+  --border-strong-2: #48484d;
+  --text-primary: #f2f1ed;
+  --text-secondary: #a9a8a3;
+  --text-tertiary: #c7c6c1;
+  --text-muted: #8a8985;
+  --accent: #6c5ce7;
+  --accent-hover: #7d6ff0;
+  --accent-success: #00d2a8;
+  --accent-error: #ff5c5c;
+  --on-accent: #ffffff;
+
+  color-scheme: dark;
   display: flex;
   min-height: 100vh;
   width: 100%;
